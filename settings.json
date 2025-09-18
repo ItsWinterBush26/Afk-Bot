@@ -1,14 +1,14 @@
 {
   "bot-account": {
-    "username": "AFKBot",
+    "username": "jadeescalante82@gmail.com",
     "password": "",
-    "type": "mojang"
+    "type": "microsoft"
   },
 
   "server": {
     "ip": "tangorangesmp.progamer.me",
     "port": 25565,
-    "version": "1.12.1"
+    "version": "1.21"
   },
   
   "position": {
@@ -35,6 +35,7 @@
       "repeat-delay": 60,
 
       "messages": [
+        "/regster password password",
         "/login password",
         "hello world"
       ]
