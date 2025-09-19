@@ -21,6 +21,7 @@ just add the following plugins:
 > Others:
 - If your server has login plugins, kindly whitelist the bot from that.
 - If your server has antibot/ddos protection, kindly whitelist the bot from that.
-- Do not change the version in settings.json
+- Do not change the version in settings.json.
+
 ### **Extra help**
 If you are facing any issue then you can join this discord server: https://discord.gg/7AYYyjZ4B8
