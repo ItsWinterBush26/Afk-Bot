@@ -18,7 +18,7 @@ app.listen(8000, () => {
 function createBot() {
   const bot = mineflayer.createBot({
     username: config['bot-account']['username'],
-    password: config['bot-account']['password'],
+    //password: config['bot-account']['password'],
     auth: config['bot-account']['type'], // "microsoft" or "offline"
     host: config.server.ip,
     port: config.server.port,
@@ -123,3 +123,4 @@ function createBot() {
 }
 
 createBot()
+
