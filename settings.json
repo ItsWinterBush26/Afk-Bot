@@ -2,7 +2,7 @@
   "bot-account": {
     "username": "AFKBot",
     "password": "",
-    "type": "microsoft"
+    "type": "offline"
   },
 
   "server": {
