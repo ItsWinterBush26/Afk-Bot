@@ -26,4 +26,6 @@ jobs:
         run: npm install
 
       - name: Run script
-        run: node index.js
+        run: |
+          sleep 30
+          node index.js
