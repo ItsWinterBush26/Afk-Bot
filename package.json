@@ -1,16 +1,30 @@
 {
-  "name": "Minecraft Afk Bot",
-  "version": "2.1",
-  "description": "Afk bot for minecraft servers.",
+  "name": "afkbot",
+  "version": "1.0.0",
+  "description": "1. Edit config.json 2. and run npm i and node index.js 3. and done",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "author": "Lamgerr",
-  "license": "MIT",
+  "author": "MannuG",
+  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.1",
-    "mineflayer": "^4.3.0",
-    "mineflayer-pathfinder": "^2.1.1"
-  }
+    "config": "^3.3.3",
+    "fs": "0.0.1-security",
+    "mineflayer": "^2.37.1",
+    "mineflayer-blockfinder": "0.0.7",
+    "mineflayer-cmd": "^1.0.2"
+  },
+  "devDependencies": {
+    "node": "^21.7.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fskhrijuanda/aternos-bot-24-7.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/fskhrijuanda/aternos-bot-24-7/issues"
+  },
+  "homepage": "https://github.com/fskhrijuanda/aternos-bot-24-7#readme"
 }
