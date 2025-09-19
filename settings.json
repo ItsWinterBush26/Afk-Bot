@@ -20,8 +20,8 @@
 
   "utils": {
     "auto-auth": {
-      "enabled": false,
-      "password": ""
+      "enabled": true,
+      "password": "password"
     },
 
     "anti-afk": {
@@ -35,7 +35,6 @@
       "repeat-delay": 60,
 
       "messages": [
-        "/login password",
         "hello world"
       ]
     },
