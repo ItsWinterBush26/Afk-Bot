@@ -1,75 +1,128 @@
-const mineflayer = require('mineflayer')
-const cmd = require('mineflayer-cmd').plugin
-const fs = require('fs');
-let rawdata = fs.readFileSync('config.json');
-let data = JSON.parse(rawdata);
-var lasttime = -1;
-var moving = 0;
-var connected = 0;
-var actions = [ 'forward', 'back', 'left', 'right']
-var lastaction;
-var pi = 3.14159;
-var moveinterval = 2; // 2 second movement interval
-var maxrandom = 5; // 0-5 seconds added to movement interval (randomly)
-var host = data["ip"];
-var username = data["name"]
-var nightskip = data["auto-night-skip"]
-var bot = mineflayer.createBot({
-  host: host,
-  username: username
-});
-function getRandomArbitrary(min, max) {
-       return Math.random() * (max - min) + min;
+const mineflayer = require('mineflayer');
+const Movements = require('mineflayer-pathfinder').Movements;
+const pathfinder = require('mineflayer-pathfinder').pathfinder;
+const { GoalBlock } = require('mineflayer-pathfinder').goals;
 
+const config = require('./settings.json');
+const express = require('express');
+
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Bot is arrived')
+});
+
+app.listen(8000, () => {
+  console.log('server started');
+});
+
+function createBot() {
+   const bot = mineflayer.createBot({
+      username: config['bot-account']['username'],
+      password: config['bot-account']['password'],
+      auth: config['bot-account']['type'],
+      host: config.server.ip,
+      port: config.server.port,
+      version: config.server.version,
+   });
+
+   bot.loadPlugin(pathfinder);
+   const mcData = require('minecraft-data')(bot.version);
+   const defaultMove = new Movements(bot, mcData);
+   bot.settings.colorsEnabled = false;
+
+   bot.once('spawn', () => {
+      console.log('\x1b[33m[AfkBot] Bot joined to the server', '\x1b[0m');
+
+      if (config.utils['auto-auth'].enabled) {
+         console.log('[INFO] Started auto-auth module');
+
+         var password = config.utils['auto-auth'].password;
+         setTimeout(() => {
+            bot.chat(`/register ${password} ${password}`);
+            bot.chat(`/login ${password}`);
+         }, 500);
+
+         console.log(`[Auth] Authentification commands executed.`);
+      }
+
+      if (config.utils['chat-messages'].enabled) {
+         console.log('[INFO] Started chat-messages module');
+         var messages = config.utils['chat-messages']['messages'];
+
+         if (config.utils['chat-messages'].repeat) {
+            var delay = config.utils['chat-messages']['repeat-delay'];
+            let i = 0;
+
+            let msg_timer = setInterval(() => {
+               bot.chat(`${messages[i]}`);
+
+               if (i + 1 == messages.length) {
+                  i = 0;
+               } else i++;
+            }, delay * 1000);
+         } else {
+            messages.forEach((msg) => {
+               bot.chat(msg);
+            });
+         }
+      }
+
+      const pos = config.position;
+
+      if (config.position.enabled) {
+         console.log(
+            `\x1b[32m[Afk Bot] Starting moving to target location (${pos.x}, ${pos.y}, ${pos.z})\x1b[0m`
+         );
+         bot.pathfinder.setMovements(defaultMove);
+         bot.pathfinder.setGoal(new GoalBlock(pos.x, pos.y, pos.z));
+      }
+
+      if (config.utils['anti-afk'].enabled) {
+         bot.setControlState('jump', true);
+         if (config.utils['anti-afk'].sneak) {
+            bot.setControlState('sneak', true);
+         }
+      }
+   });
+
+   bot.on('chat', (username, message) => {
+      if (config.utils['chat-log']) {
+         console.log(`[ChatLog] <${username}> ${message}`);
+      }
+   });
+
+   bot.on('goal_reached', () => {
+      console.log(
+         `\x1b[32m[AfkBot] Bot arrived to target location. ${bot.entity.position}\x1b[0m`
+      );
+   });
+
+   bot.on('death', () => {
+      console.log(
+         `\x1b[33m[AfkBot] Bot has been died and was respawned ${bot.entity.position}`,
+         '\x1b[0m'
+      );
+   });
+
+   if (config.utils['auto-reconnect']) {
+      bot.on('end', () => {
+         setTimeout(() => {
+            createBot();
+         }, config.utils['auto-recconect-delay']);
+      });
+   }
+
+   bot.on('kicked', (reason) =>
+      console.log(
+         '\x1b[33m',
+         `[AfkBot] Bot was kicked from the server. Reason: \n${reason}`,
+         '\x1b[0m'
+      )
+   );
+   bot.on('error', (err) =>
+      console.log(`\x1b[31m[ERROR] ${err.message}`, '\x1b[0m')
+   );
 }
 
-bot.loadPlugin(cmd)
-
-
-
-bot.on('login',function(){
-	console.log("Logged In")
-	bot.chat("/register password password",
-          "/login password",
-          "hello world");
-});
-
-bot.on('time', function(time) {
-	if(nightskip == "true"){
-	if(bot.time.timeOfDay >= 13000){
-	bot.chat('/time set day')
-	}}
-    if (connected <1) {
-        return;
-    }
-    if (lasttime<0) {
-        lasttime = bot.time.age;
-    } else {
-        var randomadd = Math.random() * maxrandom * 20;
-        var interval = moveinterval*20 + randomadd;
-        if (bot.time.age - lasttime > interval) {
-            if (moving == 1) {
-                bot.setControlState(lastaction,false);
-                moving = 0;
-                lasttime = bot.time.age;
-            } else {
-                var yaw = Math.random()*pi - (0.5*pi);
-                var pitch = Math.random()*pi - (0.5*pi);
-                bot.look(yaw,pitch,false);
-                lastaction = actions[Math.floor(Math.random() * actions.length)];
-                bot.setControlState(lastaction,true);
-                moving = 1;
-                lasttime = bot.time.age;
-                bot.activateItem();
-            }
-        }
-    }
-});
-
-bot.on('spawn',function() {
-    connected=1;
-});
-
-bot.on('death',function() {
-    bot.emit("respawn")
-});
+createBot();

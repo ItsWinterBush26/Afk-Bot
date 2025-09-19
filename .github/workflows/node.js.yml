@@ -8,7 +8,7 @@ on:
 jobs:
   run-node:
     runs-on: ubuntu-latest
-    timeout-minutes: 300     # keeps it alive up to 5 hours if needed
+        # keeps it alive up to 5 hours if needed
 
     steps:
       - name: Checkout repository
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22.x.x'   # using Node.js 14.x
+          node-version: '14'   # using Node.js 14.x
 
       - name: Install mineflayer
         run: npm install mineflayer
