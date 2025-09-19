@@ -21,6 +21,3 @@ just add the following plugins:
 - If your server has login security its auto register and login.
 - If your server has antibot/ddos protection, kindly whitelist the bot from that.
 - Do not change the version in settings.json.
-
-### **Extra help**
-If you are facing any issue then you can join this discord server: https://discord.gg/7AYYyjZ4B8
