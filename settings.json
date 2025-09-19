@@ -1,7 +1,7 @@
 {
   "bot-account": {
     "username": "AFKBot",
-    "password": "",
+    "password": "password1$",
     "type": "microsoft"
   },
 
