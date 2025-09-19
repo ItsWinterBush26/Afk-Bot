@@ -10,7 +10,7 @@ First of all you need to change the ip in [config file](https://github.com/krush
 	"port": "25565",
 	"name": "afk bot"
 }
-
+```
 ![image](https://user-images.githubusercontent.com/69315835/128631156-f5e257dd-4748-477c-87f1-d627c853590f.png)
 
 ### **Important note:**
