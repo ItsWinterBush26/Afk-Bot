@@ -1,14 +1,14 @@
 {
   "bot-account": {
     "username": "AFKBot",
-    "password": "password1$",
+    "password": "",
     "type": "microsoft"
   },
 
   "server": {
     "ip": "tangorangesmp.progamer.me",
     "port": 25565,
-    "version": "1.12.1"
+    "version": "1.21"
   },
   
   "position": {
