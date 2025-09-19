@@ -1,15 +1,17 @@
-name: Run index.js every 5 hours
+name: Afk-Bot
 
 on:
   schedule:
     - cron: "0 */5 * * *"   # runs every 5 hours
-  workflow_dispatch:        # lets you run manually if needed
-
+  workflow_dispatch:
+  
+concurrency:
+  group: Afk-bot
+  cancel-in-progress: true
+    
 jobs:
   run-node:
     runs-on: ubuntu-latest
-        # keeps it alive up to 5 hours if needed
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
